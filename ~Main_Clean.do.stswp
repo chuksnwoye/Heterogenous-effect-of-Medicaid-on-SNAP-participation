@@ -10,7 +10,7 @@
 *   This file is part of a replication package.
 *******************************************************
 
-**Education
+**** Education attainment variable
 gen Educ=.
 replace Educ=1 if educ<=71
 replace Educ=2 if educ==73
@@ -23,12 +23,7 @@ label define educ_ 1 "no high sch diploma" 2 "high sch diploma" 3 "some college"
 label values Educ educ_
 ta Educ,m
 
-****age(sqr)
-
-gen age2 = age * age
-
-
-****education dummies
+****Education dummies
 *******High school or less
 gen HSorless = 0 
 replace HSorless = 1 if educ <= 73
@@ -43,7 +38,11 @@ replace college = 1 if educ>=111
 gen female = 0
 replace female = 1 if sex==2
 
-***********race***********
+**** Square age var
+
+gen age2 = age * age
+
+***********race variables***********
 ta race
 ta race,nol
 
@@ -78,17 +77,16 @@ replace otherrace = 1 if race > 200 & hispan == 0
 
 
 
-***foodstamp(from amount recieved)
+*** Foodstamp variable (from amount received)
 gen SNAP = 0
 replace SNAP = 1 if foodstamp >= 1
 
-
-******foodstamp(from dummy)
+******foodstamp(from dummy in the data)
 gen SNAP1 = foodstmp
 
 
+****Generating marital variable
 
-**generating married variable
 ta marst
 gen married=.
 ta marst,nol
@@ -98,26 +96,27 @@ label define married_label 1 "married" 0 "divorced, widowed, separated or single
 label values married married_label
 
 
-*** parent 
+***** Generating parent variable
 gen parent = 0 
 replace parent = 1 if nchild>0
 
-**disability
+** Generating disability var
 gen disable = 0 
 replace disable = 1 if diffany == 2
 
-** drop disabled
+** dropping disabled individuals
 drop if disable == 1
 
-*** drop armed forces
+*** dropping members of the armed forces
 drop if empstat ==1
 
 
-*** Income
+*** Generating Income var
 gen income = ftotval
 replace income = 0 if ftotval < 0
 replace income = 500000 if ftotval > 500000
 
+**** Income squared
 gen incsq = income * income
 
 
@@ -127,14 +126,14 @@ gen incsq = income * income
 * Federal Poverty Line construction
 ************************************
 
-* 1. Clean family size
+**** Cleaning family size
 replace famsize = . if famsize < 1
 
-* 2. Cap family size at 7 (HHS guideline practice)
+****Cap family size at 7 (HHS guideline practice)
 gen famsize_cap = famsize
 replace famsize_cap = 7 if famsize_cap > 7
 
-* 3. Construct FPL line using HHS poverty guidelines
+**** Construct FPL(Federal Poverty Line) using HHS poverty guidelines
 gen fpl_line = .
 
 replace fpl_line = 10800 + (famsize_cap - 1)*3700 if year == 2008
@@ -149,28 +148,30 @@ replace fpl_line = 12140 + (famsize_cap - 1)*4320 if year == 2018
 replace fpl_line = 12490 + (famsize_cap - 1)*4420 if year == 2019
 replace fpl_line = 12760 + (famsize_cap - 1)*4480 if year == 2020
 
-* 4. Family income as share of FPL
+**** Generating family income as a share of FPL
 gen fpl_ratio = ftotval / fpl_line if ftotval >= 0 & fpl_line < .
 
 label var fpl_ratio "Family income as share of FPL (manual, capped famsize)"
 
-* 5. Medicaid income eligibility (ACA adults)
+**** Generating Medicaid income eligibility (ACA adults)
 gen medicaid_eligible = (fpl_ratio <= 1.38) if fpl_ratio < .
 label var medicaid_eligible "Income-eligible for Medicaid (<=138% FPL)"
 
 
-***gen sample with age
+***Generating a sample with age restriction
 gen sample = 1 if age > 25 & age < 65
 gen sample1 = 1 if age > 17 & age < 65
 
 ta medicaid_eligible if sample1 == 1
 
+***** Rename Unemployment rate
 ren Unemploymentrate ur
 drop _merge
 
 ***save main data
 save "C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta", replace
 file C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta saved
+
 
 
 
