@@ -1,0 +1,180 @@
+
+*******************************************************
+* Project: Medicaid Expansion and SNAP Participation
+* Purpose: Data cleaning for CPS ASEC analysis
+* Author: Chukwuma Nwoye
+* Description:
+*   This do-file cleans CPS ASEC data and constructs
+*   variables used in the analysis of heterogeneous
+*   effects of Medicaid expansion on SNAP participation.
+*
+* Notes:
+*   SNAP is defined as a binary indicator for receiving
+*   SNAP benefits in the survey year.
+*   This file is part of a replication package.
+*******************************************************
+
+**Education
+gen Educ=.
+replace Educ=1 if educ<=71
+replace Educ=2 if educ==73
+replace Educ=3 if educ==81|educ==91|educ==92
+replace Educ=4 if educ>=111
+ta Educ
+ta Educ,nol
+
+label define educ_ 1 "no high sch diploma" 2 "high sch diploma" 3 "some college" 4 "bachelor's degree"
+label values Educ educ_
+ta Educ,m
+
+****age(sqr)
+
+gen age2 = age * age
+
+
+****education dummies
+*******High school or less
+gen HSorless = 0 
+replace HSorless = 1 if educ <= 73
+
+
+****college
+gen college = 0 
+replace college = 1 if educ>=111
+
+
+**female
+gen female = 0
+replace female = 1 if sex==2
+
+***********race***********
+ta race
+ta race,nol
+
+gen race1 = . 
+replace race1=1 if race==100 & hispan==0
+replace race1=2 if race==200 & hispan==0
+replace race1=3 if hispan!=0 & hispan!=901 & hispan!=902
+replace race1 = 4 if race==651|race==652 | race ==300 |race1 ==.
+
+label define race_label2 1 "white" 2 "black" 3 "hispanic" 4 "other"
+ta race1
+label values race1 race_label2
+
+
+****race dummies
+***white
+gen white = 0
+replace white = 1 if race==100 & hispan==0
+
+***black 
+gen black = 0
+replace black = 1 if race==200 & hispan==0
+
+**hispanic
+gen hispanic = 0
+replace hispanic = 1 if hispan!=0
+
+*** Other races
+gen otherrace = 0 
+replace otherrace = 1 if race > 200 & hispan == 0 
+
+
+
+
+***foodstamp(from amount recieved)
+gen SNAP = 0
+replace SNAP = 1 if foodstamp >= 1
+
+
+******foodstamp(from dummy)
+gen SNAP1 = foodstmp
+
+
+
+**generating married variable
+ta marst
+gen married=.
+ta marst,nol
+replace married=1 if marst==1|marst==2
+replace married=0 if marst==3|marst==4|marst==5|marst==6
+label define married_label 1 "married" 0 "divorced, widowed, separated or single"
+label values married married_label
+
+
+*** parent 
+gen parent = 0 
+replace parent = 1 if nchild>0
+
+**disability
+gen disable = 0 
+replace disable = 1 if diffany == 2
+
+** drop disabled
+drop if disable == 1
+
+*** drop armed forces
+drop if empstat ==1
+
+
+*** Income
+gen income = ftotval
+replace income = 0 if ftotval < 0
+replace income = 500000 if ftotval > 500000
+
+gen incsq = income * income
+
+
+***** Generating Medicaid Eligibility
+
+************************************
+* Federal Poverty Line construction
+************************************
+
+* 1. Clean family size
+replace famsize = . if famsize < 1
+
+* 2. Cap family size at 7 (HHS guideline practice)
+gen famsize_cap = famsize
+replace famsize_cap = 7 if famsize_cap > 7
+
+* 3. Construct FPL line using HHS poverty guidelines
+gen fpl_line = .
+
+replace fpl_line = 10800 + (famsize_cap - 1)*3700 if year == 2008
+replace fpl_line = 10900 + (famsize_cap - 1)*3800 if inlist(year,2009,2010,2011)
+replace fpl_line = 11170 + (famsize_cap - 1)*3960 if year == 2012
+replace fpl_line = 11490 + (famsize_cap - 1)*4020 if year == 2013
+replace fpl_line = 11670 + (famsize_cap - 1)*4060 if year == 2014
+replace fpl_line = 11770 + (famsize_cap - 1)*4160 if year == 2015
+replace fpl_line = 11880 + (famsize_cap - 1)*4160 if year == 2016
+replace fpl_line = 12060 + (famsize_cap - 1)*4180 if year == 2017
+replace fpl_line = 12140 + (famsize_cap - 1)*4320 if year == 2018
+replace fpl_line = 12490 + (famsize_cap - 1)*4420 if year == 2019
+replace fpl_line = 12760 + (famsize_cap - 1)*4480 if year == 2020
+
+* 4. Family income as share of FPL
+gen fpl_ratio = ftotval / fpl_line if ftotval >= 0 & fpl_line < .
+
+label var fpl_ratio "Family income as share of FPL (manual, capped famsize)"
+
+* 5. Medicaid income eligibility (ACA adults)
+gen medicaid_eligible = (fpl_ratio <= 1.38) if fpl_ratio < .
+label var medicaid_eligible "Income-eligible for Medicaid (<=138% FPL)"
+
+
+***gen sample with age
+gen sample = 1 if age > 25 & age < 65
+gen sample1 = 1 if age > 17 & age < 65
+
+ta medicaid_eligible if sample1 == 1
+
+ren Unemploymentrate ur
+drop _merge
+
+***save main data
+save "C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta", replace
+file C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta saved
+
+
+
