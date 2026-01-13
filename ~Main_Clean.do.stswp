@@ -42,7 +42,7 @@ replace female = 1 if sex==2
 
 gen age2 = age * age
 
-***********race variables***********
+******* Generating race variables
 ta race
 ta race,nol
 
@@ -77,7 +77,7 @@ replace otherrace = 1 if race > 200 & hispan == 0
 
 
 
-*** Foodstamp variable (from amount received)
+***Generating  Foodstamp variable (from amount received)
 gen SNAP = 0
 replace SNAP = 1 if foodstamp >= 1
 
@@ -171,6 +171,7 @@ drop _merge
 ***save main data
 save "C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta", replace
 file C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta saved
+
 
 
 
