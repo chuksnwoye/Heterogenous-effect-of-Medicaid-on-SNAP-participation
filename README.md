@@ -33,8 +33,7 @@ This repository contains both **Python** and **Stata** code. Files were uploaded
 
 ### Stata Do-Files
 - Replication of all main regressions
-- Event-study analyses using two-way fixed effects
-- Event-study plots generated in Stata
+- Event-study analyses
 
 The Python and Stata files implement the **same empirical specifications**, allowing results to be verified across software environments.
 
