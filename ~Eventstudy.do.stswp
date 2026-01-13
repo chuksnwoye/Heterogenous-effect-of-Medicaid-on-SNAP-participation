@@ -1,0 +1,224 @@
+
+
+*************Defining Event time
+gen rel_year = year - 2014
+label var rel_year "Years relative to Medicaid expansion (2014)"
+
+***********Setting up event study (no negative indicator)
+** Shift so minimum is 0 (min rel_year = -6)
+*    Base period (-1) -> shift = 5
+*--------------------------------------------------*
+gen rel_year_shift = rel_year + 6
+label var rel_year_shift "Shifted relative year (base = -1)"
+
+
+*************Event-study regression
+***********All individuals
+*--------------------------------------------------*
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1, ///
+    cluster(statefip)
+
+estimates store es_snap
+
+***********Event-study plot
+*--------------------------------------------------*
+
+coefplot es_snap, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+	
+
+	
+********* female
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & female == 1, ///
+    cluster(statefip)
+
+estimates store female
+
+coefplot female, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+
+
+	
+********male
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & female == 0, ///
+    cluster(statefip)
+
+estimates store male
+
+coefplot male, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+	
+
+	
+****Race (white and non-white)
+
+*****White
+
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & white== 1, ///
+    cluster(statefip)
+
+estimates store white
+
+coefplot white, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+
+
+	
+*** Non-white
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & white == 0, ///
+    cluster(statefip)
+
+estimates store nonwhite
+
+coefplot nonwhite, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+	
+	
+***Education(HS)
+
+****Less than HS
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & HSorless== 1, ///
+    cluster(statefip)
+
+estimates store lessHS
+
+coefplot lessHS, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
+
+
+	
+*** More than HS
+
+reg SNAP ///
+    i.medic##i.ib5.rel_year_shift ///
+    i.Educ female i.race1 married age ///
+    i.statefip i.year ///
+    if medicaid_eligible==1 & parent==0 & sample1==1 & HSorless == 0, ///
+    cluster(statefip)
+
+estimates store moreHS
+
+coefplot moreHS, ///
+    keep(1.medic#*.rel_year_shift) ///
+    omitted baselevels ///
+    vertical ///
+    xlabel( ///
+        1 "-6" 2 "-5" 3 "-4" 4 "-3" 5 "-2" 6 "-1" ///
+        7 "0" 8 "1" 9 "2" 10 "3" 11 "4" ///
+        12 "5" 13 "6", angle(45)) ///
+    xline(6, lpattern(dash) lcolor(gs8)) ///
+    yline(0, lpattern(solid) lcolor(gs10)) ///
+    ciopts(recast(rcap) lcolor(blue)) ///
+    msymbol(O) mcolor(navy) ///
+    xtitle("Years Relative to Medicaid Expansion (2014)") ///
+    ytitle("Effect on SNAP Participation") ///
+    title("") ///
+    legend(off)
