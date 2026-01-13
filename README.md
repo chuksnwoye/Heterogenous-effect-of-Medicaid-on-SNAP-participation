@@ -6,7 +6,7 @@ This project examines how the Affordable Care Act’s Medicaid expansion affecte
 Understanding these heterogeneous responses is important for evaluating how public insurance expansions interact with other components of the social safety net.
 
 ## Main Findings
-I find that Medicaid expansion increased SNAP participation **among non-white individuals**, with an estimated increase of approximately **3.6 percentage points**. This effect is concentrated among **Hispanic individuals**, who experience an increase of about **4.1 percentage points**. I find **no statistically meaningful effect for white individuals**.
+I find that Medicaid expansion increased SNAP participation **among non-white individuals**, with an estimated increase of approximately **3.6 percentage points**. This effect is concentrated among **Hispanic individuals**, who experience an increase of about **4.1 percentage points**. I find **no statistically meaningful effect for white individuals**. I find no economically meaningful differences by gender.
 
 These patterns are robust when the analysis is re-estimated separately for **parents** and **non-parents**, suggesting that the observed heterogeneity is not driven solely by household composition.
 
