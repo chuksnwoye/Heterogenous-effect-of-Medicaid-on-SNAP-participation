@@ -4,13 +4,9 @@
 * Purpose: Data cleaning for CPS ASEC analysis
 * Author: Chukwuma Nwoye
 * Description:
-*   This do-file cleans CPS ASEC data and constructs
-*   variables used in the analysis of heterogeneous
-*   effects of Medicaid expansion on SNAP participation.
-*
+*   This do-file cleans CPS ASEC data and constructs variables used in the analysis of heterogeneous effects of Medicaid expansion on SNAP participation.
 * Notes:
-*   SNAP is defined as a binary indicator for receiving
-*   SNAP benefits in the survey year.
+*   SNAP is defined as a binary indicator for receiving SNAP benefits in the survey year.
 *   This file is part of a replication package.
 *******************************************************
 
@@ -175,6 +171,7 @@ drop _merge
 ***save main data
 save "C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta", replace
 file C:\Users\chukw\OneDrive\Documentos\Medicaid_and_SNAP\Data and Codes\Maindata2.dta saved
+
 
 
 
