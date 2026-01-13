@@ -21,7 +21,7 @@ The analysis uses a **difference-in-differences** framework comparing Medicaid e
 - Parents only
 - Non-parents only
 
-Heterogeneity is examined by race and education using subgroup analyses.
+Heterogeneity is examined by race, education (high school completion) and gender.
 
 ## Code Structure
 This repository contains both **Python** and **Stata** code. Files were uploaded manually (not via Git).
