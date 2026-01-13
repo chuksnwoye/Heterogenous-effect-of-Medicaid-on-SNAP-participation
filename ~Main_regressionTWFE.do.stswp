@@ -20,6 +20,7 @@
 *   This file is part of a replication package.
 *******************************************************
 
+******* Defining treatment timing
 
 *****2014 January states
 gen medicaid = 0
@@ -41,23 +42,17 @@ replace medicaid = 1 if statefip == 30 & year > = 2016
 ****(Louisiana - July 2016)
 replace medicaid = 1 if statefip == 22 & year > = 2016
 
-***************  non- parent adults  **************************
-reg SNAP1 medicaid i.statefip i.year if medicaid_eligible==1 & parent == 0 & sample1 == 1, cluster(statefip)
-
-reg SNAP1 medicaid i.Educ female white black hispan otherrace married age age2 famsize ur i.statefip i.year if medicaid_eligible==1 & parent == 0 & sample1 == 1, cluster(statefip)
 
 
 
-**********All
 
-*** Parents
-
+******************Heterogeneity analysis for Everyone (non-parents& parents)
 reg SNAP1 medicaid i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1, cluster(statefip)
 
 reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible==1 & sample1 == 1, cluster(statefip)
 
 
-******************Heterogeneity analysis for Parents
+******************Heterogeneity analysis
 
 ***Gender interaction
 reg SNAP1 i.medicaid##i.female i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & sample1 == 1, cluster(statefip)
@@ -65,10 +60,10 @@ reg SNAP1 i.medicaid##i.female i.Educ white black hispanic married age age2 fams
 lincom 1.medicaid + 1.medicaid#1.female
 
 ****female
-reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1 & female == 1, cluster(statefip)
+reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & sample1 == 1 & female == 1, cluster(statefip)
 
 ****male
-reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1 & female == 0, cluster(statefip)
+reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1  & sample1 == 1 & female == 0, cluster(statefip)
  
 **Race
 reg SNAP1 i.medicaid##i.white i.Educ white female black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & sample1 == 1, cluster(statefip)
@@ -94,11 +89,13 @@ reg SNAP1 i.medicaid##i.HSorless white black hispanic female married age age2 fa
 lincom 1.medicaid + 1.medicaid#1.HSorless
 
 
+*************** Regressions for  Non- parent adults  **************************
+reg SNAP1 medicaid i.statefip i.year if medicaid_eligible==1 & parent == 0 & sample1 == 1, cluster(statefip)
 
-******************Heterogeneity analysis for non-parents
+reg SNAP1 medicaid i.Educ female white black hispan otherrace married age age2 famsize ur i.statefip i.year if medicaid_eligible==1 & parent == 0 & sample1 == 1, cluster(statefip)
 
-
-***Gender
+***********Heterogeneity Analysis
+***By Gender
 ***Gender interaction
 reg SNAP1 i.medicaid##i.female i.Educ white black hispanic otherrace married age age2 famsize nchild famsize ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1, cluster(statefip)
 
@@ -113,7 +110,7 @@ reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild
  
 
 
-**Race
+**By Race
 reg SNAP1 i.medicaid##i.white i.Educ white female black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1, cluster(statefip)
 
 lincom 1.medicaid + 1.medicaid#1.white
@@ -124,14 +121,14 @@ reg SNAP1 i.medicaid i.Educ female married age age2 famsize nchild ur i.statefip
 ****Black 
 reg SNAP1 i.medicaid i.Educ female married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1 & black == 1, cluster(statefip)
 
-****Hispanic 
+***Hispanic 
 reg SNAP1 i.medicaid i.Educ female married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1 & hispanic == 1, cluster(statefip)
 
-****Other race
+***Other race
 
 *reg SNAP1 i.medicaid i.Educ female married age age2 famsize nchild ur income incsq i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1 & otherrace == 1, cluster(statefip)
 
-****Education
+*******By Education
 
 reg SNAP1 i.medicaid##i.HSorless white black hispanic female married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1, cluster(statefip)
 
@@ -145,7 +142,7 @@ reg SNAP1 i.medicaid white black hispanic otherrace female married age age2 fams
 reg SNAP1 i.medicaid white black hispanic otherrace female married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 0 & sample1 == 1 & HSorless == 0, cluster(statefip)
 
 
-*** Parents
+********** Regression analysis for parents
 
 reg SNAP1 medicaid i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1, cluster(statefip)
 
@@ -153,7 +150,7 @@ reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize n
 
 
 ******************Heterogeneity analysis for Parents
-
+*****By Gender
 ***Gender interaction
 reg SNAP1 i.medicaid##i.female i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1, cluster(statefip)
 
@@ -165,13 +162,13 @@ reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild
 ****male
 reg SNAP1 i.medicaid i.Educ white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1 & female == 0, cluster(statefip)
  
-**Race
+*** By Race
 reg SNAP1 i.medicaid##i.white i.Educ white female black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1, cluster(statefip)
 
 lincom 1.medicaid + 1.medicaid#1.white
 
 
-****Education
+****By Education
 
 reg SNAP1 i.medicaid##i.HSorless white black hispanic female married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible == 1 & parent == 1 & sample1 == 1, cluster(statefip)
 
@@ -179,12 +176,16 @@ lincom 1.medicaid + 1.medicaid#1.HSorless
 
 
 ******testing split racial groups
+***White
 reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1 & white == 1, cluster(statefip)
 
-
+***Black
 reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1 & black == 1, cluster(statefip)
 
+***Hispanic
 reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize nchild ur i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1 & hispanic == 1, cluster(statefip)
 
+*** Otherrace
 reg SNAP1 medicaid i.Educ female white black hispanic married age age2 famsize ur nchild i.statefip i.year if medicaid_eligible==1 & parent == 1 & sample1 == 1 & otherrace == 1, cluster(statefip
+
 
