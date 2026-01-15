@@ -27,8 +27,7 @@ Heterogeneity is examined by race, education (high school completion) and gender
 This repository contains both **Python** and **Stata** code. Files were uploaded manually (not via Git).
 
 ### Python (Jupyter Notebooks)
-- Data cleaning and construction of analysis variables
-- Regression analysis replicating the main specifications
+- Data cleaning and regression analysis replicating the main specifications
 - Plots of raw mean SNAP participation over time using `matplotlib`
 
 ### Stata Do-Files
