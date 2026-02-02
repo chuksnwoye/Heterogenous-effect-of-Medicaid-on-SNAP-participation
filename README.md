@@ -3,7 +3,7 @@
 ## Overview
 This project examines how the Affordable Care Act’s Medicaid expansion affected participation in the Supplemental Nutrition Assistance Program (SNAP), with a focus on **heterogeneous effects across demographic groups**. While prior studies document a positive spillover from Medicaid to SNAP participation, they largely focus on average effects. This project studies whether those spillovers differ by **race, education, and gender**.
 
-Understanding these heterogeneous responses is important for evaluating how public insurance expansions interact with other components of the social safety net.
+Evaluating these heterogeneous responses is important for understanding how Medicaid expansion affected SNAP participation, which populations drive the observed spillovers, and how the broader impacts of health policy are distributed.
 
 ## Main Findings
 I find that Medicaid expansion increased SNAP participation **among non-white individuals**, with an estimated increase of approximately **3.6 percentage points**. This effect is concentrated among **Hispanic individuals**, who experience an increase of about **4.1 percentage points**. I find **no statistically meaningful effect for white individuals**. I find no economically meaningful differences by gender.
