@@ -38,7 +38,7 @@ The Python and Stata files implement the **same empirical specifications**, allo
 
 ## Figures
 - **Raw mean trends** are plotted using Python (`matplotlib`)
-- **Event-study plots** are produced using Stata
+- **Event-study plots** in the graphs folder produced using Stata
 
 All figures correspond directly to the included code.
 
